@@ -5,8 +5,228 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+            .modal {
+                    display: none; /* Hidden by default */
+                    justify-content: center;
+                    align-content: center;
+                    position: fixed; /* Stay in place */
+                    z-index: 1; /* Sit on top */
+                    left: 0;
+                    top: 0;
+                    width: 100%; /* Full width */
+                    height: 100%; /* Full height */
+                    overflow: auto; /* Enable scroll if needed */
+                    background-color: rgb(0,0,0); /* Fallback color */
+                    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                    }
+
+            .optSelectorModalContent{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+                    /* gap: 1em; */
+                    width: 10em;
+                    height: 10em;
+                    border: 2px solid black;
+                    border-radius: .5em;
+                    background-color: slategrey;
+                    margin: auto;
+
+            }
+            .optSelectorModalContent h4{
+                    text-decoration: underline;
+                    margin-bottom: 0;
+            }
+            .optSelectorModalContent p{
+                    margin-top: .25em;
+            }
+
+            .msmButtons{
+                display: flex;
+                flex-direction: row;
+                gap: 2em;
+            }
+            .selectorVideo{
+                z-index: -1;
+                transform: rotate(-90deg);
+                width: 100%    !important;
+                height: auto   !important;
+            }
+
+            #markSelectorModalContent
+{
+    display: none;
+}
+    </style>
 </head>
 <body>
     
+
+
+
+    <p>
+      <span style="text-decoration:line-through; ">  Set up your project with HTML, CSS and Javascript files and get the Git repo all set up.</span><br>
+      <span style="text-decoration:line-through; ">  You’re going to store the gameboard as an array inside of a Gameboard object, so start there! </span>
+        Your players are also going to be stored in objects… 
+        and you’re probably going to want an object to control the flow of the game itself.
+        <br> Your main goal here is to have as little global code as possible. Try tucking everything away inside of a module or factory. Rule of thumb: if you only ever need ONE of something (gameBoard, displayController), use a module. If you need multiples of something (players!), create them with factories.
+        <br>Set up your HTML and write a JavaScript function that will render the contents of the gameboard array to the webpage (for now you can just manually fill in the array with "X"s and "O"s)
+        Build the functions that allow players to add marks to a specific spot on the board, and then tie it to the DOM, letting players click on the gameboard to place their marker. Don’t forget the logic that keeps players from playing in spots that are already taken!
+        Think carefully about where each bit of logic should reside. Each little piece of functionality should be able to fit in the game, player or gameboard objects.. but take care to put them in “logical” places. Spending a little time brainstorming here can make your life much easier later!
+        Build the logic that checks for when the game is over! Should check for 3-in-a-row and a tie.
+        Clean up the interface to allow players to put in their names, include a button to start/restart the game and add a display element that congratulates the winning player!
+        Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
+        Start by just getting the computer to make a random legal move.
+        Once you’ve gotten that, work on making the computer smart. It is possible to create an unbeatable AI using the minimax algorithm (read about it here, some googling will help you out with this one)
+        If you get this running definitely come show it off in the chatroom. It’s quite an accomplishment!
+
+
+    </p>
+
+    <button id="callVersusModal">Open VS Modal</button>
+    <button id="callPlayer1Modal">player 1 Modal</button>
+    <button id="callPlayer2Modal">player 2 Modal</button>
+
+    <button id="callMSModal">Open Modal</button>
+
+    <!-- The Modal -->
+    <div id="optionSelectorModal" class="modal">
+    
+      <!-- Modal content -->
+        <div id="modeSelectorModalContent" class="optSelectorModalContent">
+        <h4>Mode</h4><br>
+        <p> How many Players?</p>
+        <div class="msmButtons">
+        <button id="modeSelection1" value="1">1</button>
+        <button id="modeSelection2" value="2">2</button>
+        </div>
+        <!-- <div class="selectorVideo">
+            <video id="running" controls="none" autoplay="autoplay">
+                <source src="knockOutRunning.mov" type='video/mp4'>
+                </video>
+          </div> -->
+        </div>
+        <div id="markSelectorModalContent" class="optSelectorModalContent">
+            <h4>Player 1</h4><br>
+            <p> Choose your mark</p>
+            <div class="msmButtons">
+            <button id="markSelectionX">X</button>
+            <button id="markSelectionO">O</button>
+            </div>
+            <!-- <div class="selectorVideo">
+                <video id="running" controls="none" autoplay="autoplay">
+                    <source src="knockOutRunning.mov" type='video/mp4'>
+                    </video>
+              </div> -->
+      </div>
+      <div class="battleGround">
+
+
+
+
+      </div>
+
+
+
+
+
+
+    </div>
+<br><br><br>
 </body>
+
+
+<script>
+    let numberOfPlayers=1;
+
+    // <button id="callPlayer1Modal">player 1 Modal</button>
+    // <button id="callPlayer2Modal">player 2 Modal</button>
+
+
+const callVersusModal = document.getElementById('callVersusModal');
+        callVersusModal.addEventListener('click', (e)=>{playerSelectsMode(e)})
+const modeSelection1 = document.getElementById('modeSelection1')
+modeSelection1.addEventListener('click', (e)=>{playerNameEntry()})
+
+const callMSModal = document.getElementById("callMSModal");
+        callMSModal.addEventListener('click', (e)=>{playerSelectsMark()})
+
+
+
+
+const markSelectionX = document.getElementById("markSelectionX");
+        markSelectionX.addEventListener('click', (e)=>{markChoice("X")});
+const markSelectionO = document.getElementById("markSelectionO");
+        markSelectionO.addEventListener('click', (e)=>{markChoice("O")});
+const optionSelectorModal = document.getElementById("optionSelectorModal");
+const markSelectorModalContent = document.getElementById("markSelectorModalContent");
+
+const Gameboard = {
+        gboard: ["","","","","","","","","",],
+        playerMark: "",
+}
+
+const playerLogin = (name)=>{
+return    name;
+
+
+
+}
+
+
+
+
+const playerSelectsMode = ()=>{
+    // modeSelectorModal.style.display="flex" 
+    
+    optionSelectorModal.style.display="flex";
+}
+
+const playerNameEntry = (e)=>{
+
+    console.log("name time!")
+    console.log(e)
+}
+
+
+
+
+const playerSelectsMark = ()=>{
+    console.log(e)
+    console.log('call modal')
+    optionSelectorModal.style.display="flex";
+}
+
+const markChoice = (input) => {
+            if(input==="X"){
+                Gameboard.playerMark = "X";
+                console.log("selected " + Gameboard.playerMark)
+                pickedX();
+            }else if(input==="O"){
+                Gameboard.playerMark = "O";
+                console.log("selected " + Gameboard.playerMark)
+                pickedO();
+            }
+}
+
+
+const pickedX= ()=>{
+console.log("decorate with X");
+// markSelectorModalContent.innerHTML=`<video controls="controls">
+//                                     <source src="/knockOutRunning.mov" type='video/mov'>
+//                                     </video>`
+};
+const pickedO= ()=>{
+    console.log("decorate with O")
+};
+</script>
+
+
+
+
+
+
+
 </html>
