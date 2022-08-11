@@ -56,9 +56,22 @@
             }
 
             #markSelectorModalContent
-{
-    display: none;
-}
+            {
+                display: none;
+            }
+            #p1NameEnterModal
+            {
+                display: none;
+            }
+            #p2NameEnterModal
+            {
+                display: none;
+            }
+            .modalButton{
+                margin-top: 1em;
+            }
+
+
     </style>
 </head>
 <body>
@@ -67,14 +80,9 @@
 
 
     <p>
-      <span style="text-decoration:line-through; ">  Set up your project with HTML, CSS and Javascript files and get the Git repo all set up.</span><br>
-      <span style="text-decoration:line-through; ">  You’re going to store the gameboard as an array inside of a Gameboard object, so start there! </span>
-        Your players are also going to be stored in objects… 
-        and you’re probably going to want an object to control the flow of the game itself.
-        <br> Your main goal here is to have as little global code as possible. Try tucking everything away inside of a module or factory. Rule of thumb: if you only ever need ONE of something (gameBoard, displayController), use a module. If you need multiples of something (players!), create them with factories.
-        <br>Set up your HTML and write a JavaScript function that will render the contents of the gameboard array to the webpage (for now you can just manually fill in the array with "X"s and "O"s)
-        Build the functions that allow players to add marks to a specific spot on the board, and then tie it to the DOM, letting players click on the gameboard to place their marker. Don’t forget the logic that keeps players from playing in spots that are already taken!
-        Think carefully about where each bit of logic should reside. Each little piece of functionality should be able to fit in the game, player or gameboard objects.. but take care to put them in “logical” places. Spending a little time brainstorming here can make your life much easier later!
+         <br>Set up your HTML and write a JavaScript function that will render the contents of the gameBoard array to the webpage (for now you can just manually fill in the array with "X"s and "O"s)
+        Build the functions that allow players to add marks to a specific spot on the board, and then tie it to the DOM, letting players click on the gameBoard to place their marker. Don’t forget the logic that keeps players from playing in spots that are already taken!
+        Think carefully about where each bit of logic should reside. Each little piece of functionality should be able to fit in the game, player or gameBoard objects.. but take care to put them in “logical” places. Spending a little time brainstorming here can make your life much easier later!
         Build the logic that checks for when the game is over! Should check for 3-in-a-row and a tie.
         Clean up the interface to allow players to put in their names, include a button to start/restart the game and add a display element that congratulates the winning player!
         Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
@@ -86,10 +94,6 @@
     </p>
 
     <button id="callVersusModal">Open VS Modal</button>
-    <button id="callPlayer1Modal">player 1 Modal</button>
-    <button id="callPlayer2Modal">player 2 Modal</button>
-
-    <button id="callMSModal">Open Modal</button>
 
     <!-- The Modal -->
     <div id="optionSelectorModal" class="modal">
@@ -102,12 +106,20 @@
         <button id="modeSelection1" value="1">1</button>
         <button id="modeSelection2" value="2">2</button>
         </div>
-        <!-- <div class="selectorVideo">
-            <video id="running" controls="none" autoplay="autoplay">
-                <source src="knockOutRunning.mov" type='video/mp4'>
-                </video>
-          </div> -->
         </div>
+        <div id="p1NameEnterModal" class="optSelectorModalContent">
+            <h4>Player 1</h4><br>
+                <input type="text" name="p1NameFormInput" id="p1NameFormInput" placeholder="e.g. Bob..">
+                <button class="modalButton" id="p1NameSubmit">submit</button>
+                </div>
+                
+         <div id="p2NameEnterModal" class="optSelectorModalContent">
+                <h4>Player 2</h4><br>
+                    <input type="text" name="p2NameFormInput" id="p2NameFormInput" placeholder="e.g. Bobert?">
+                    <button class="modalButton" id="p2NameSubmit">submit</button>
+                    </div>
+
+
         <div id="markSelectorModalContent" class="optSelectorModalContent">
             <h4>Player 1</h4><br>
             <p> Choose your mark</p>
@@ -121,6 +133,7 @@
                     </video>
               </div> -->
       </div>
+
       <div class="battleGround">
 
 
@@ -140,78 +153,123 @@
 
 <script>
     let numberOfPlayers=1;
-
-    // <button id="callPlayer1Modal">player 1 Modal</button>
-    // <button id="callPlayer2Modal">player 2 Modal</button>
-
+    let p1NameFormInput= document.getElementById('p1NameFormInput');
+    let p2NameFormInput= document.getElementById('p2NameFormInput');
+    let player1NameDisplay = "";
+    let player2NameDisplay = "Computer";
 
 const callVersusModal = document.getElementById('callVersusModal');
         callVersusModal.addEventListener('click', (e)=>{playerSelectsMode(e)})
+
+
+
+
+
 const modeSelection1 = document.getElementById('modeSelection1')
-modeSelection1.addEventListener('click', (e)=>{playerNameEntry()})
+        modeSelection1.addEventListener('click', (e)=>{playerNameEntry(1)})
+
+const p1NameSubmit = document.getElementById('p1NameSubmit')
+        p1NameSubmit.addEventListener('click',(e)=>{
+            // add player 1 name
+            gameBoard.playerArena[0] = {name: p1NameFormInput.value }
+            
+            
+            if(gameBoard.playerCount=== 1 ){
+                console.log("pull up computer")
+                p1NameEnterModal.style.display="none";
+                playerSelectsMark();
+            }else if(gameBoard.playerCount=== 2 ){
+                console.log("pull up player 2 name")
+                    p1NameEnterModal.style.display="none";
+                    p2NameEnterModal.style.display="flex"
+            }
+        })
+
+const p2NameSubmit = document.getElementById('p2NameSubmit')
+        p2NameSubmit.addEventListener('click',(e)=>{
+
+
+            gameBoard.playerArena[1] = {name: p2NameFormInput.value}
+            p2NameEnterModal.style.display="none";
+            playerSelectsMark();
+
+        })
+
+const modeSelection2 = document.getElementById('modeSelection2')
+        modeSelection2.addEventListener('click', (e)=>{playerNameEntry(2)})
+
+
+
+
 
 const callMSModal = document.getElementById("callMSModal");
         callMSModal.addEventListener('click', (e)=>{playerSelectsMark()})
-
-
-
-
 const markSelectionX = document.getElementById("markSelectionX");
         markSelectionX.addEventListener('click', (e)=>{markChoice("X")});
 const markSelectionO = document.getElementById("markSelectionO");
         markSelectionO.addEventListener('click', (e)=>{markChoice("O")});
+
 const optionSelectorModal = document.getElementById("optionSelectorModal");
+
 const markSelectorModalContent = document.getElementById("markSelectorModalContent");
 
-const Gameboard = {
+const gameBoard = {
+        playerCount: 0,
+        playerArena: [],
         gboard: ["","","","","","","","","",],
         playerMark: "",
 }
 
-const playerLogin = (name)=>{
-return    name;
+// const playerLogin = (name)=>{
+// return    name;
 
-
-
-}
-
+// }
 
 
 
 const playerSelectsMode = ()=>{
     // modeSelectorModal.style.display="flex" 
-    
     optionSelectorModal.style.display="flex";
 }
 
-const playerNameEntry = (e)=>{
-
-    console.log("name time!")
-    console.log(e)
+const playerNameEntry = (pCountInput)=>{
+    if(pCountInput===1){
+        gameBoard.playerCount=1;
+    }
+    if(pCountInput===2){
+        gameBoard.playerCount=2;
+    }
+    modeSelectorModalContent.style.display="none";
+    p1NameEnterModal.style.display="flex";
 }
 
 
 
 
 const playerSelectsMark = ()=>{
-    console.log(e)
+   
     console.log('call modal')
-    optionSelectorModal.style.display="flex";
+    markSelectorModalContent.style.display="flex";
 }
 
 const markChoice = (input) => {
             if(input==="X"){
-                Gameboard.playerMark = "X";
-                console.log("selected " + Gameboard.playerMark)
+                gameBoard.playerMark = "X";
+                console.log("selected " + gameBoard.playerMark)
+                gameBoard['playerArena'][0]["mark"]="X";
+                if(gameBoard.playerCount===2){
+                gameBoard['playerArena'][1]["mark"]="O";
+                }
                 pickedX();
             }else if(input==="O"){
-                Gameboard.playerMark = "O";
-                console.log("selected " + Gameboard.playerMark)
+                gameBoard.playerMark = "O";
+                console.log("selected " + gameBoard.playerMark)
+                gameBoard['playerArena'][0]["mark"]="O";
+                if(gameBoard.playerCount===2){
+                gameBoard['playerArena'][1]["mark"]="X";}
                 pickedO();
             }
 }
-
-
 const pickedX= ()=>{
 console.log("decorate with X");
 // markSelectorModalContent.innerHTML=`<video controls="controls">
