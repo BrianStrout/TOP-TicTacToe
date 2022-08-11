@@ -71,13 +71,93 @@
                 margin-top: 1em;
             }
 
+            .battleGround{
+                background-color: brown;
+                position: fixed; /* Stay in place */
+                    z-index: 2; /* Sit on top */
+                    left: 0;
+                    top: 0;
+                    width: 100%; /* Full width */
+                    height: 100%; /* Full height */
+                    display: none;
+                    
+                    justify-content: center;
+                    align-content: center;
+                    
+                }
+            .battleDiv{
+                width: 60%;
+                height: 60%;
+                margin: auto;
+                background-color: aqua;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                padding: 1em;
+            }
+            .gameGrid{
+                border: 5px solid black;
+            }
+
+                        #box0{
+                            border-top: 0px solid;
+                            border-right: 2.5px solid;
+                            border-bottom: 2.5px solid;
+                            border-left: 0px solid;
+                        }
+                        #box1{
+                            border-top: 0px solid;
+                            border-right: 2.5px solid;
+                            border-bottom: 2.5px solid;
+                            border-left: 2.5px solid;
+                        }
+                        #box2{
+                            border-top: 0px solid;
+                            border-right: 0px solid;
+                            border-bottom: 2.5px solid;
+                            border-left: 2.5px solid;
+                        }
+                        #box3{
+                            border-top: 2.5px solid;
+                            border-right: 2.5px solid;
+                            border-bottom: 2.5px solid;
+                            border-left: 0px solid;
+                        }
+                        #box4{
+                            border-top: 2.5px solid;
+                            border-right: 2.5px solid;
+                            border-bottom: 2.5px solid;
+                            border-left: 2.5px solid;
+                        }
+                        #box5{
+                            border-top: 2.5px solid;
+                            border-right: 0px solid;
+                            border-bottom: 2.5px solid;
+                            border-left: 2.5px solid;
+                        }
+                        #box6{
+                            border-top: 2.5px solid;
+                            border-right: 2.5px solid;
+                            border-bottom: 0px solid;
+                            border-left: 0px solid;
+                        }
+                        #box7{
+                            border-top: 2.5px solid;
+                            border-right: 2.5px solid;
+                            border-bottom: 0px solid;
+                            border-left: 2.5px solid;
+                        }
+                        #box8{
+                            border-top: 2.5px solid;
+                            border-right: 0px solid;
+                            border-bottom: 0px solid;
+                            border-left: 2.5px solid;
+                        }
 
     </style>
 </head>
 <body>
     
-
-
+    
 
     <p>
          <br>Set up your HTML and write a JavaScript function that will render the contents of the gameBoard array to the webpage (for now you can just manually fill in the array with "X"s and "O"s)
@@ -111,15 +191,12 @@
             <h4>Player 1</h4><br>
                 <input type="text" name="p1NameFormInput" id="p1NameFormInput" placeholder="e.g. Bob..">
                 <button class="modalButton" id="p1NameSubmit">submit</button>
-                </div>
-                
+                </div>              
          <div id="p2NameEnterModal" class="optSelectorModalContent">
                 <h4>Player 2</h4><br>
                     <input type="text" name="p2NameFormInput" id="p2NameFormInput" placeholder="e.g. Bobert?">
                     <button class="modalButton" id="p2NameSubmit">submit</button>
                     </div>
-
-
         <div id="markSelectorModalContent" class="optSelectorModalContent">
             <h4>Player 1</h4><br>
             <p> Choose your mark</p>
@@ -133,20 +210,22 @@
                     </video>
               </div> -->
       </div>
-
-      <div class="battleGround">
-
-
-
-
-      </div>
-
-
-
-
-
-
     </div>
+    
+      <div id="battleGround" class="battleGround">
+
+        
+
+
+</div>
+
+
+
+
+
+
+
+    
 <br><br><br>
 </body>
 
@@ -157,6 +236,7 @@
     let p2NameFormInput= document.getElementById('p2NameFormInput');
     let player1NameDisplay = "";
     let player2NameDisplay = "Computer";
+    const battleGround = document.getElementById('battleGround');
 
 const callVersusModal = document.getElementById('callVersusModal');
         callVersusModal.addEventListener('click', (e)=>{playerSelectsMode(e)})
@@ -188,7 +268,6 @@ const p1NameSubmit = document.getElementById('p1NameSubmit')
 const p2NameSubmit = document.getElementById('p2NameSubmit')
         p2NameSubmit.addEventListener('click',(e)=>{
 
-
             gameBoard.playerArena[1] = {name: p2NameFormInput.value}
             p2NameEnterModal.style.display="none";
             playerSelectsMark();
@@ -197,13 +276,8 @@ const p2NameSubmit = document.getElementById('p2NameSubmit')
 
 const modeSelection2 = document.getElementById('modeSelection2')
         modeSelection2.addEventListener('click', (e)=>{playerNameEntry(2)})
-
-
-
-
-
-const callMSModal = document.getElementById("callMSModal");
-        callMSModal.addEventListener('click', (e)=>{playerSelectsMark()})
+// const callMSModal = document.getElementById("callMSModal");
+//         callMSModal.addEventListener('click', (e)=>{playerSelectsMark()})
 const markSelectionX = document.getElementById("markSelectionX");
         markSelectionX.addEventListener('click', (e)=>{markChoice("X")});
 const markSelectionO = document.getElementById("markSelectionO");
@@ -217,7 +291,7 @@ const gameBoard = {
         playerCount: 0,
         playerArena: [],
         gboard: ["","","","","","","","","",],
-        playerMark: "",
+        
 }
 
 // const playerLogin = (name)=>{
@@ -254,22 +328,56 @@ const playerSelectsMark = ()=>{
 
 const markChoice = (input) => {
             if(input==="X"){
-                gameBoard.playerMark = "X";
-                console.log("selected " + gameBoard.playerMark)
+                
+                console.log(gameBoard.playerArena[0].name + " has selected " + gameBoard.playerMark)
                 gameBoard['playerArena'][0]["mark"]="X";
                 if(gameBoard.playerCount===2){
                 gameBoard['playerArena'][1]["mark"]="O";
                 }
                 pickedX();
             }else if(input==="O"){
-                gameBoard.playerMark = "O";
+                
                 console.log("selected " + gameBoard.playerMark)
                 gameBoard['playerArena'][0]["mark"]="O";
                 if(gameBoard.playerCount===2){
                 gameBoard['playerArena'][1]["mark"]="X";}
                 pickedO();
             }
+            markSelectorModalContent.style.display="none";
+            generateGame();
 }
+
+
+function generateGame(){
+
+    battleGround.style.display='flex';
+
+    let battlediv = document.createElement('div');
+    battlediv.id = 'battleForeGround';
+    battlediv.classList.add("battleDiv");
+    // battlediv.innerHTML = 'battleForeGround time?';
+    // div.className = 'border pad';
+ 
+    battleGround.appendChild(battlediv);
+
+    for(i=0; i<9;i++){
+        box=document.createElement('div');
+        box.id=`box${i}`;
+        box.innerHTML = `X`;
+        box.classList.add("gameGrid");
+        battlediv.appendChild(box);
+
+    }
+
+
+
+
+
+}
+
+
+
+
 const pickedX= ()=>{
 console.log("decorate with X");
 // markSelectorModalContent.innerHTML=`<video controls="controls">
