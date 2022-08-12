@@ -323,7 +323,7 @@ const gameBoard = {
         playerCount: 0,
         playerArena: [],
         currentPlayer: 0,
-        gboard: ["","","","","","","","","",],
+        gboard: ["x","","","","","","","","",],
         
         
 }
@@ -399,6 +399,7 @@ const generateGame =()=>{
         box=document.createElement('div');
         box.id=`box${i}`;
         box.innerHTML = `😮`;
+        box.setAttribute("data-dewey", i);
         box.classList.add("gameGrid");
         battlediv.appendChild(box);
         box.addEventListener('click', tileSelection)
@@ -409,11 +410,21 @@ const generateGame =()=>{
 
 const tileSelection = (e)=>{
         let currentPlayer=gameBoard.currentPlayer;
-
+        let arraySelected = 10
         if(gameBoard.currentPlayer===0){
+            arraySelected = parseInt(e.target.dataset.dewey);
+            console.log(arraySelected + "is array selected.....?")
+            console.log(gameBoard.gboard[arraySelected])
+
+            if(gameBoard.gboard[arraySelected]=== "X" || "O"){
+                console.log("trouble here?")
+                return}
+            else{
             e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
+            gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
+
             gameBoard.currentPlayer=1; 
-            console.log(e.target[3]);
+            }
         }else{
             e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
             gameBoard.currentPlayer=0;
