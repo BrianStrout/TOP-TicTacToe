@@ -72,7 +72,7 @@
             }
 
             .battleGround{
-                background-color: brown;
+                /* background-color: brown; */
                 position: fixed; /* Stay in place */
                     z-index: 2; /* Sit on top */
                     left: 0;
@@ -80,19 +80,30 @@
                     width: 100%; /* Full width */
                     height: 100%; /* Full height */
                     display: none;
+                    grid-template-columns: 10% 1fr 3fr 1fr 10%;
+                    grid-template-rows: 10% 65% 1fr 10%;
+                    /* gap 1em; */
+                    grid-template-areas:
+                    ". . . . ."
+                    ". player1Card battleDiv player2Card ."
+                    ". player1Card controller player2Card ."
+                    ". . . . ."
                     
+                    ;
                     justify-content: center;
                     align-content: center;
                     
                 }
             .battleDiv{
-                width: 60%;
-                height: 60%;
+                grid-area: battleDiv;
+                width: 100%;
+                height: 100%;
                 margin: auto;
                 background-color: aqua;
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr;
-                padding: 1em;
+                /* padding: 1em; */
+
             }
             .gameGrid{
                 border: 5px solid black;
@@ -153,7 +164,20 @@
                             border-left: 2.5px solid;
                         }
 .playerCard{
-    z-index: 3;
+    z-index: 2;
+    padding: 1em;
+}
+#player1{
+    background-color: deeppink;
+    grid-area: player1Card;
+}
+#player2{
+    grid-area: player2Card;
+    background-color: lightgreen;
+}
+.controller{
+    grid-area: controller;
+    background-color: darkorange;
 }
     </style>
 </head>
@@ -217,21 +241,27 @@
       </div>
     </div>
     
-    <div id="player1" class="playerCard" >
-        <h5>Player 1</h5>
-        <p>HELPME!!!!!</p>
-    </div>
+
 
         <div id="battleGround" class="battleGround">
+            <div id="player1" class="playerCard" >
+                <h5 id="player1NameHeader"></h5>
+                <span id="yourmarkspan"></span>
+                <span id="yourturn">your turn</span>
+                 <span id="player1Score">Score</span>
+            </div>
+
+            <div id="player2" class="playerCard" >
+                <h5 id="player2NameHeader"></h5>
+                <span id="yourmarkspan"></span>
+                <span id="yourturn">waiting</span>
+                 <span id="player2Score">Score</span>
+            </div>
+            <div class="controller">
+                <button>reset</button>
+            </div>
         </div>
-        <div id="player2" class="playerCard" >
-            <h5>Player 2</h5>
-        </div>
-
-
-
-
-
+       
 
     
 <br><br><br>
@@ -248,23 +278,19 @@
 
 const callVersusModal = document.getElementById('callVersusModal');
         callVersusModal.addEventListener('click', (e)=>{playerSelectsMode(e)})
-
-
-
-
-
-const modeSelection1 = document.getElementById('modeSelection1')
+const modeSelection1 = document.getElementById('modeSelection1');
         modeSelection1.addEventListener('click', (e)=>{playerNameEntry(1)})
-
-const p1NameSubmit = document.getElementById('p1NameSubmit')
+const p1NameSubmit = document.getElementById('p1NameSubmit');
+const player1NameHeader = document.getElementById('player1NameHeader');
+const player2NameHeader = document.getElementById('player2NameHeader');
         p1NameSubmit.addEventListener('click',(e)=>{
-            // add player 1 name
             gameBoard.playerArena[0] = {name: p1NameFormInput.value }
-            
-            
+            player1NameHeader.innerHTML=p1NameFormInput.value;
+
             if(gameBoard.playerCount=== 1 ){
                 console.log("pull up computer")
                 p1NameEnterModal.style.display="none";
+                setupComputer();
                 playerSelectsMark();
             }else if(gameBoard.playerCount=== 2 ){
                 console.log("pull up player 2 name")
@@ -272,35 +298,40 @@ const p1NameSubmit = document.getElementById('p1NameSubmit')
                     p2NameEnterModal.style.display="flex"
             }
         })
-
+const setupComputer = (e) =>{
+    gameBoard.playerArena[1] = {name: "🤖 Computer 🤖 "};
+    player2NameHeader.innerHTML=gameBoard.playerArena[1].name;
+}
 const p2NameSubmit = document.getElementById('p2NameSubmit')
         p2NameSubmit.addEventListener('click',(e)=>{
 
             gameBoard.playerArena[1] = {name: p2NameFormInput.value}
+            player2NameHeader.innerHTML=p2NameFormInput.value;
             p2NameEnterModal.style.display="none";
             playerSelectsMark();
 
         })
-
 const modeSelection2 = document.getElementById('modeSelection2')
         modeSelection2.addEventListener('click', (e)=>{playerNameEntry(2)})
-// const callMSModal = document.getElementById("callMSModal");
-//         callMSModal.addEventListener('click', (e)=>{playerSelectsMark()})
 const markSelectionX = document.getElementById("markSelectionX");
         markSelectionX.addEventListener('click', (e)=>{markChoice("X")});
 const markSelectionO = document.getElementById("markSelectionO");
         markSelectionO.addEventListener('click', (e)=>{markChoice("O")});
-
 const optionSelectorModal = document.getElementById("optionSelectorModal");
-
 const markSelectorModalContent = document.getElementById("markSelectorModalContent");
-
 const gameBoard = {
         playerCount: 0,
         playerArena: [],
+        currentPlayer: 0,
         gboard: ["","","","","","","","","",],
         
+        
 }
+
+
+
+
+
 
 // const playerLogin = (name)=>{
 // return    name;
@@ -339,25 +370,25 @@ const markChoice = (input) => {
                 
                 console.log(gameBoard.playerArena[0].name + " has selected " + gameBoard.playerMark)
                 gameBoard['playerArena'][0]["mark"]="X";
-                if(gameBoard.playerCount===2){
+                // if(gameBoard.playerCount===2){
                 gameBoard['playerArena'][1]["mark"]="O";
-                }
+                // }
                 pickedX();
             }else if(input==="O"){
                 
                 console.log("selected " + gameBoard.playerMark)
                 gameBoard['playerArena'][0]["mark"]="O";
-                if(gameBoard.playerCount===2){
+                // if(gameBoard.playerCount===2){
                 gameBoard['playerArena'][1]["mark"]="X";}
                 pickedO();
-            }
+            // }
             markSelectorModalContent.style.display="none";
             generateGame();
 }
 
 
-const generateGame=()=>{
-    battleGround.style.display='flex';
+const generateGame =()=>{
+    battleGround.style.display='grid';
     let battlediv = document.createElement('div');
     battlediv.id = 'battleForeGround';
     battlediv.classList.add("battleDiv");
@@ -367,20 +398,33 @@ const generateGame=()=>{
     for(i=0; i<9;i++){
         box=document.createElement('div');
         box.id=`box${i}`;
-        box.innerHTML = `X`;
+        box.innerHTML = `😮`;
         box.classList.add("gameGrid");
         battlediv.appendChild(box);
+        box.addEventListener('click', tileSelection)
     }
+
+
 }
 
+const tileSelection = (e)=>{
+        let currentPlayer=gameBoard.currentPlayer;
+
+        if(gameBoard.currentPlayer===0){
+            e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
+            gameBoard.currentPlayer=1; 
+            console.log(e.target[3]);
+        }else{
+            e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
+            gameBoard.currentPlayer=0;
+            console.log(e.target[3]);
+        }
+}
 
 
 
 const pickedX= ()=>{
 console.log("decorate with X");
-// markSelectorModalContent.innerHTML=`<video controls="controls">
-//                                     <source src="/knockOutRunning.mov" type='video/mov'>
-//                                     </video>`
 };
 const pickedO= ()=>{
     console.log("decorate with O")
