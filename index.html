@@ -178,6 +178,12 @@
 .controller{
     grid-area: controller;
     background-color: darkorange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.waiting{
+    opacity: 50%;
 }
     </style>
 </head>
@@ -248,18 +254,18 @@
             <div id="player1" class="playerCard" >
                 <h5 id="player1NameHeader"></h5>
                 <span id="yourmarkspan"></span>
-                <span id="yourturn">your turn</span>
-                 <span id="player1Score">Score</span>
+                <span id="yourTurnP1">your turn</span><br>
+                <span>Score: <span id="player1Score">0</span></span>
             </div>
 
-            <div id="player2" class="playerCard" >
+            <div id="player2" class="playerCard waiting" >
                 <h5 id="player2NameHeader"></h5>
                 <span id="yourmarkspan"></span>
-                <span id="yourturn">waiting</span>
-                 <span id="player2Score">Score</span>
+                <span id="yourTurnP2">waiting</span><br>
+                 <span>Score: <span id="player2Score">0</span></span>
             </div>
             <div class="controller">
-                <button>reset</button>
+                <button id="resetButton">reset</button>
             </div>
         </div>
        
@@ -276,7 +282,11 @@
     let player1NameDisplay = "";
     let player2NameDisplay = "Computer";
     const battleGround = document.getElementById('battleGround');
+    const yourTurnP1 = document.getElementById('yourTurnP1')
+    const yourTurnP2 = document.getElementById('yourTurnP2')
 
+const resetButton = document.getElementById('resetButton');
+        resetButton.addEventListener('click', ()=>{resetGame()})
 const callVersusModal = document.getElementById('callVersusModal');
         callVersusModal.addEventListener('click', (e)=>{playerSelectsMode(e)})
 const modeSelection1 = document.getElementById('modeSelection1');
@@ -376,7 +386,6 @@ const markChoice = (input) => {
             generateGame();
 }
 
-
 const generateGame =()=>{
     battleGround.style.display='grid';
     let battlediv = document.createElement('div');
@@ -411,8 +420,11 @@ const tileSelection = (e)=>{
                 }else{
                 e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
                 gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
+                updatePlayerCardsWithTurn()
                 gameBoard.currentPlayer=1; 
+                
                 }
+                
         }else{
             arraySelected = parseInt(e.target.dataset.dewey);
             console.log(arraySelected + " is array selected.....?")
@@ -423,12 +435,62 @@ const tileSelection = (e)=>{
                 }else{
                 e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
                 gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
+                updatePlayerCardsWithTurn()
                 gameBoard.currentPlayer=0; 
+                
                 }
+            }
+                
         }
+
+
+const updatePlayerCardsWithTurn = ()=>{    
+    console.log("update called")
+            if(gameBoard.currentPlayer === 0){ 
+
+                if(yourTurnP1.textContent === 'your turn'){
+                                yourTurnP1.textContent = 'waiting';
+                                player1.classList.add('waiting');
+                                yourTurnP2.textContent = 'your turn';
+                                player2.classList.remove('waiting');
+                                console.log("player 1 your turn should have turned to waiting")
+
+
+                }else if(yourTurnP1.textContent === 'waiting'){
+                                yourTurnP1.textContent = 'your turn';
+                                player1.classList.remove('waiting');
+                                yourTurnP2.textContent = 'waiting';
+                                player2.classList.add('waiting'); 
+                                console.log("player 1 your turn should have turned to your turn")
+                            }
+            }else if(gameBoard.currentPlayer === 1){
+                if(yourTurnP2.textContent === 'your turn'){
+                                yourTurnP2.textContent = 'waiting';
+                                player2.classList.add('waiting');
+                                yourTurnP1.textContent = 'your turn';
+                                player1.classList.remove('waiting');
+                }else if(yourTurnP2.textContent === 'waiting'){
+                                yourTurnP2.textContent = 'your turn';
+                                player2.classList.remove('waiting');
+                                yourTurnP1.textContent = 'waiting';
+                                player1.classList.add('waiting');
+                }   
+            } 
 }
 
 
+const symp = ()=>{
+    let whoIsWaiting = document.getElementsByClassName('waiting');
+        console.log(".......Running Symptom Check")
+        console.log("current player is " + gameBoard.currentPlayer)
+        console.log(whoIsWaiting[0].id + "is waiting");
+        console.log()
+        console.log()
+        console.log()
+        console.log()
+        console.log()
+
+}
 
 const pickedX= ()=>{
 console.log("decorate with X");
@@ -436,6 +498,21 @@ console.log("decorate with X");
 const pickedO= ()=>{
     console.log("decorate with O")
 };
+
+
+const inspectForWin=()=>{
+                
+let underReview=gameBoard.playerArena[currentPlayer].mark;
+console.log("inspecting " + underReview);
+
+}
+
+
+
+
+
+
+
 
 
 
