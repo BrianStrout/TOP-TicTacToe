@@ -181,6 +181,7 @@
 }
     </style>
 </head>
+
 <body>
     
     <ol>
@@ -323,7 +324,7 @@ const gameBoard = {
         playerCount: 0,
         playerArena: [],
         currentPlayer: 0,
-        gboard: ["x","","","","","","","","",],
+        gboard: ["","","","","","","","","",],
         
         
 }
@@ -413,18 +414,17 @@ const tileSelection = (e)=>{
         let arraySelected = 10
         if(gameBoard.currentPlayer===0){
             arraySelected = parseInt(e.target.dataset.dewey);
-            console.log(arraySelected + "is array selected.....?")
+            console.log(arraySelected + " is array selected.....?")
             console.log(gameBoard.gboard[arraySelected])
 
-            if(gameBoard.gboard[arraySelected]=== "X" || "O"){
-                console.log("trouble here?")
-                return}
-            else{
-            e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
-            gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
+                if(gameBoard.gboard[arraySelected] !== ""){
+                    return;
+                }else{
+                e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
+                gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
 
-            gameBoard.currentPlayer=1; 
-            }
+                gameBoard.currentPlayer=1; 
+                }
         }else{
             e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
             gameBoard.currentPlayer=0;
