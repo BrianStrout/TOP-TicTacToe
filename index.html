@@ -330,17 +330,6 @@ const gameBoard = {
 }
 
 
-
-
-
-
-// const playerLogin = (name)=>{
-// return    name;
-
-// }
-
-
-
 const playerSelectsMode = ()=>{
     // modeSelectorModal.style.display="flex" 
     optionSelectorModal.style.display="flex";
@@ -436,8 +425,6 @@ const tileSelection = (e)=>{
                 gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
                 gameBoard.currentPlayer=0; 
                 }
-
-     
         }
 }
 
@@ -453,11 +440,13 @@ const pickedO= ()=>{
 
 
 const resetGame = ()=>{
-        // gameBoard.gboard = ["","","","","","","","","",];
+        gameBoard.gboard = ["","","","","","","","","",];
         for(i=0;i<9;i++){
             console.log(i);
-            let resetBox= document.getElementById(`box${i}`);
-            box.id.innerHTML = `😮`;
+            let resetBoxID= "box"+i;
+            console.log(resetBoxID);
+            let resetBox= document.getElementById(resetBoxID);
+            resetBox.innerHTML = `😮`;
             
 
         }
