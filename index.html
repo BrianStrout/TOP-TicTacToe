@@ -422,13 +422,22 @@ const tileSelection = (e)=>{
                 }else{
                 e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
                 gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
-
                 gameBoard.currentPlayer=1; 
                 }
         }else{
-            e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
-            gameBoard.currentPlayer=0;
-            console.log(e.target[3]);
+            arraySelected = parseInt(e.target.dataset.dewey);
+            console.log(arraySelected + " is array selected.....?")
+            console.log(gameBoard.gboard[arraySelected])
+
+                if(gameBoard.gboard[arraySelected] !== ""){
+                    return;
+                }else{
+                e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
+                gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
+                gameBoard.currentPlayer=0; 
+                }
+
+     
         }
 }
 
@@ -442,6 +451,18 @@ const pickedO= ()=>{
 };
 
 
+
+const resetGame = ()=>{
+        // gameBoard.gboard = ["","","","","","","","","",];
+        for(i=0;i<9;i++){
+            console.log(i);
+            let resetBox= document.getElementById(`box${i}`);
+            box.id.innerHTML = `😮`;
+            
+
+        }
+
+}
 
 
 
