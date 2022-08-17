@@ -183,7 +183,7 @@
     align-items: center;
 }
 .waiting{
-    opacity: 50%;
+    opacity: 80%;
 }
     </style>
 </head>
@@ -200,7 +200,7 @@
     <p>
          
                Build the logic that checks for when the game is over! Should check for 3-in-a-row and a tie.
-        Clean up the interface to allow players to put in their names, include a button to start/restart the game and add a display element that congratulates the winning player!
+        Clean up the interface to allow players to put in their names, include a button to start/restart the game and add a display element that congratulates the winnsings player!
         Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
         Start by just getting the computer to make a random legal move.
         Once you’ve gotten that, work on making the computer smart. It is possible to create an unbeatable AI using the minimax algorithm (read about it here, some googling will help you out with this one)
@@ -277,6 +277,7 @@
 
 <script>
     let numberOfPlayers=1;
+    let defendingChamp = 0;
     let p1NameFormInput= document.getElementById('p1NameFormInput');
     let p2NameFormInput= document.getElementById('p2NameFormInput');
     let player1NameDisplay = "";
@@ -284,6 +285,8 @@
     const battleGround = document.getElementById('battleGround');
     const yourTurnP1 = document.getElementById('yourTurnP1')
     const yourTurnP2 = document.getElementById('yourTurnP2')
+    const player1Score = document.getElementById('player1Score');
+    const player2Score = document.getElementById('player2Score');
 
 const resetButton = document.getElementById('resetButton');
         resetButton.addEventListener('click', ()=>{resetGame()})
@@ -334,11 +337,133 @@ const gameBoard = {
         playerCount: 0,
         playerArena: [],
         currentPlayer: 0,
-        gboard: ["","","","","","","","","",],
-        
-        
+        gboard: [0,1,2,3,4,5,6,7,8],       
 }
 
+
+let origBoard = gameBoard.gboard;
+
+//first we'll pll from ttorial
+const inspectForWin=(board, player)=>{
+                        
+                        // let uR=gameBoard.playerArena[gameBoard.currentPlayer].mark;
+                        let win = false;
+                        // let urPlayer = gameBoard.currentPlayer;
+                        // console.log("inspecting" + uR);
+                        if((board[0] === player && board[1]===player && board[2]===player)||
+                        (board[3] === player && board[4]===player && board[5]===player)||
+                        (board[6] === player && board[7]===player && board[8]===player)||
+                        (board[0] === player && board[3]===player && board[6]===player)||
+                        (board[1] === player && board[4]===player && board[7]===player)||
+                        (board[2] === player && board[5]===player && board[8]===player)||
+                        (board[0] === player && board[4]===player && board[8]===player)||
+                        (board[2] === player && board[4]===player && board[6]===player)
+                        ){win = true;
+                        }                             
+            return win;
+                                    // gameOver(urPlayer);
+}
+// const inspectForWin=()=>{
+                        
+//                         let uR=gameBoard.playerArena[gameBoard.currentPlayer].mark;
+//                         let win = false;
+//                         let urPlayer = gameBoard.currentPlayer;
+//                         console.log("inspecting" + uR);
+//                                 if((gameBoard.gboard[0] === uR && gameBoard.gboard[1]===uR && gameBoard.gboard[2]===uR)||
+//                                     (gameBoard.gboard[3] === uR && gameBoard.gboard[4]===uR && gameBoard.gboard[5]===uR)||
+//                                     (gameBoard.gboard[6] === uR && gameBoard.gboard[7]===uR && gameBoard.gboard[8]===uR)||
+//                                     (gameBoard.gboard[0] === uR && gameBoard.gboard[3]===uR && gameBoard.gboard[6]===uR)||
+//                                     (gameBoard.gboard[1] === uR && gameBoard.gboard[4]===uR && gameBoard.gboard[7]===uR)||
+//                                     (gameBoard.gboard[2] === uR && gameBoard.gboard[5]===uR && gameBoard.gboard[8]===uR)||
+//                                     (gameBoard.gboard[0] === uR && gameBoard.gboard[4]===uR && gameBoard.gboard[8]===uR)||
+//                                     (gameBoard.gboard[2] === uR && gameBoard.gboard[4]===uR && gameBoard.gboard[6]===uR)
+//                                 ){
+//                                     let win = true;
+//                                 }                             
+//                     return win;
+//                                     // gameOver(urPlayer);
+// }
+                                                                // START SPECIFICALLY AI MOVES
+
+// an array to collect all the objects
+
+let availSpots = emptyIndexies(gameBoard.gboard);
+let huplayer = "";
+let aiPlayer = "";
+let iter = 0;
+function emptyIndexies(board){
+  return  board.filter(s => s != "O" && s != "X");
+}
+
+
+//cut from here
+
+
+
+function minimax(newBoard, player) {
+  iter++;
+
+  let availSpots = emptyIndexies(origBoard);
+
+  if (inspectForWin(newBoard, huplayer)) {
+    return {
+      score: -10
+    };
+  } else if (inspectForWin(newBoard, aiPlayer)) {
+    return {
+      score: 10
+    };
+  } else if (availSpots.length === 0) {
+    return {
+      score: 0
+    };
+  }
+
+  let moves = [];
+  for (var i = 0; i < availSpots.length; i++) {
+    let move = {};
+    move.index = newBoard[availSpots[i]];
+    newBoard[availSpots[i]] = player;
+
+    if (player == aiPlayer) {
+      var g = minimax(newBoard, huPlayer);
+      move.score = g.score;
+    } else {
+      var g = minimax(newBoard, aiPlayer);
+      move.score = g.score;
+    }
+    newBoard[availSpots[i]] = move.index;
+    moves.push(move);
+  }
+  // if it is the computer's turn loop over the moves and choose the move with the highest score
+  let bestMove;
+  if(player === aiPlayer){
+    var bestScore = -10000;
+    for(var i = 0; i < moves.length; i++){
+      if(moves[i].score > bestScore){
+        bestScore = moves[i].score;
+        bestMove = i;
+      }
+    }
+  }else{
+
+// else loop over the moves and choose the move with the lowest score
+    var bestScore = 10000;
+    for(var i = 0; i < moves.length; i++){
+      if(moves[i].score < bestScore){
+        bestScore = moves[i].score;
+        bestMove = i;
+      }
+    }
+  }
+
+// return the chosen move (object) from the moves array
+  return moves[bestMove];
+}
+
+
+
+                                                                // END SPECIFICALLY AI MOVES
 
 const playerSelectsMode = ()=>{
     // modeSelectorModal.style.display="flex" 
@@ -370,16 +495,20 @@ const markChoice = (input) => {
                 
                 console.log(gameBoard.playerArena[0].name + " has selected " + gameBoard.playerMark)
                 gameBoard['playerArena'][0]["mark"]="X";
+                huplayer = "X";
                 // if(gameBoard.playerCount===2){
                 gameBoard['playerArena'][1]["mark"]="O";
+                aiPlayer = "O";
                 // }
                 pickedX();
             }else if(input==="O"){
                 
                 console.log("selected " + gameBoard.playerMark)
                 gameBoard['playerArena'][0]["mark"]="O";
+                huplayer ="X"
                 // if(gameBoard.playerCount===2){
                 gameBoard['playerArena'][1]["mark"]="X";}
+                aiPlayer="O"
                 pickedO();
             // }
             markSelectorModalContent.style.display="none";
@@ -415,11 +544,11 @@ const tileSelection = (e)=>{
             console.log(arraySelected + " is array selected.....?")
             console.log(gameBoard.gboard[arraySelected])
 
-                if(gameBoard.gboard[arraySelected] !== ""){
+                if(typeof(gameBoard.gboard[arraySelected]) !== "number"){
                     return;
                 }else{
-                e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
-                gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
+                e.target.innerHTML= gameBoard.playerArena[currentPlayer].mark;
+                gameBoard.gboard[arraySelected]= gameBoard.playerArena[currentPlayer].mark;
                 updatePlayerCardsWithTurn()
                 gameBoard.currentPlayer=1; 
                 
@@ -430,11 +559,11 @@ const tileSelection = (e)=>{
             console.log(arraySelected + " is array selected.....?")
             console.log(gameBoard.gboard[arraySelected])
 
-                if(gameBoard.gboard[arraySelected] !== ""){
+                if(typeof(gameBoard.gboard[arraySelected]) !== "number"){
                     return;
                 }else{
-                e.target.innerHTML=gameBoard.playerArena[currentPlayer].mark;
-                gameBoard.gboard[arraySelected]= arraySelected = e.target.dataset.dewey;
+                e.target.innerHTML= gameBoard.playerArena[currentPlayer].mark;
+                gameBoard.gboard[arraySelected]= gameBoard.playerArena[currentPlayer].mark;
                 updatePlayerCardsWithTurn()
                 gameBoard.currentPlayer=0; 
                 
@@ -500,16 +629,16 @@ const pickedO= ()=>{
 };
 
 
-const inspectForWin=()=>{
-                
-let underReview=gameBoard.playerArena[currentPlayer].mark;
-console.log("inspecting " + underReview);
+
+
+
+
+const gameOver = (winner)=>{
+    console.log(winner + "has won");
+
+
 
 }
-
-
-
-
 
 
 
@@ -524,10 +653,8 @@ const resetGame = ()=>{
             console.log(resetBoxID);
             let resetBox= document.getElementById(resetBoxID);
             resetBox.innerHTML = `😮`;
-            
-
+        
         }
-
 }
 
 
