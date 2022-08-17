@@ -282,6 +282,7 @@
     let p2NameFormInput= document.getElementById('p2NameFormInput');
     let player1NameDisplay = "";
     let player2NameDisplay = "Computer";
+
     const battleGround = document.getElementById('battleGround');
     const yourTurnP1 = document.getElementById('yourTurnP1')
     const yourTurnP2 = document.getElementById('yourTurnP2')
@@ -543,29 +544,31 @@ const generateGame =()=>{
     }
 }
 const tileSelection = (e)=>{
-        let currentPlayer=gameBoard.currentPlayer;
-        let arraySelected = 0;
-
-
+    let currentPlayer=gameBoard.currentPlayer;
+    let arraySelected = 0;
         if(gameBoard.currentPlayer===0){
             arraySelected = parseInt(e.target.dataset.dewey);
             console.log(arraySelected + " is array selected.....?")
             console.log(gameBoard.gboard[arraySelected])
 
-                if(typeof(gameBoard.gboard[arraySelected]) !== "number"){
+            if(typeof(gameBoard.gboard[arraySelected]) !== "number"){
                     return;
                 }else{
                 e.target.innerHTML= gameBoard.playerArena[currentPlayer].mark;
                 gameBoard.gboard[arraySelected]= gameBoard.playerArena[currentPlayer].mark;
-                updatePlayerCardsWithTurn()
-                gameBoard.currentPlayer=1; 
                 }
             }
+
+     
         if(numberOfPlayers === 1){
                     console.log("only 1 player, running Computer");
-                    checkAndRunAI();
-                
-
+                    
+                    updatePlayerCardsWithTurn();
+                    gameBoard.currentPlayer=1; 
+                    setTimeout(function(){checkAndRunAI();}, 2000);
+                    gameBoard.currentPlayer=0; 
+                    // 
+             
                 
         }else if(numberOfPlayers===2){
             arraySelected = parseInt(e.target.dataset.dewey);
@@ -596,7 +599,7 @@ const checkAndRunAI = ()=>{
     origBoard[index] = aiPlayer;
     console.log("AIPlayer is typed as: " + typeof(aiPlayer))
     // selectedBox.innerHTML= String(aiPlayer);
-    
+    updatePlayerCardsWithTurn();
 
 
 
@@ -623,9 +626,19 @@ const checkAndRunAI = ()=>{
 
 
 }
+const scan = ()=>{
+    let switcha = parseInt(gameBoard.currentPlayer);
 
+if(inspectForWin(origBoard,gameBoard.playerArena[switcha].mark)){
+    alert("WIN!");
+}
+
+}
 const updatePlayerCardsWithTurn = ()=>{    
     console.log("update called")
+
+
+
             if(gameBoard.currentPlayer === 0){ 
 
                 if(yourTurnP1.textContent === 'your turn'){
@@ -634,6 +647,8 @@ const updatePlayerCardsWithTurn = ()=>{
                                 yourTurnP2.textContent = 'your turn';
                                 player2.classList.remove('waiting');
                                 console.log("player 1 your turn should have turned to waiting")
+                                console.log("investigating class "+ player1.classList)
+                                scan()
 
 
                 }else if(yourTurnP1.textContent === 'waiting'){
@@ -642,6 +657,7 @@ const updatePlayerCardsWithTurn = ()=>{
                                 yourTurnP2.textContent = 'waiting';
                                 player2.classList.add('waiting'); 
                                 console.log("player 1 your turn should have turned to your turn")
+                                scan()
                             }
             }else if(gameBoard.currentPlayer === 1){
                 if(yourTurnP2.textContent === 'your turn'){
@@ -649,11 +665,13 @@ const updatePlayerCardsWithTurn = ()=>{
                                 player2.classList.add('waiting');
                                 yourTurnP1.textContent = 'your turn';
                                 player1.classList.remove('waiting');
+                                scan()
                 }else if(yourTurnP2.textContent === 'waiting'){
                                 yourTurnP2.textContent = 'your turn';
                                 player2.classList.remove('waiting');
                                 yourTurnP1.textContent = 'waiting';
                                 player1.classList.add('waiting');
+                                scan()
                 }   
             } 
 }
