@@ -401,6 +401,7 @@ function emptyIndexies(board){
 
 
 function minimax(newBoard, player) {
+    console.log("minimax initiated")
   iter++;
 
   let availSpots = emptyIndexies(origBoard);
@@ -423,6 +424,7 @@ function minimax(newBoard, player) {
   for (var i = 0; i < availSpots.length; i++) {
     let move = {};
     move.index = newBoard[availSpots[i]];
+    console.log("checking out move at " + move.index)
     newBoard[availSpots[i]] = player;
 
     if (player == aiPlayer) {
@@ -491,26 +493,33 @@ const playerSelectsMark = ()=>{
 }
 
 const markChoice = (input) => {
+
+            console.log("input is: " +input);
+            console.log("type of input is: " + typeof(input));
+
             if(input==="X"){
-                
-                console.log(gameBoard.playerArena[0].name + " has selected " + gameBoard.playerMark)
                 gameBoard['playerArena'][0]["mark"]="X";
-                huplayer = "X";
+                console.log(gameBoard.playerArena[0].name + " has selected " + gameBoard.playerMark)
+                huPlayer = "X";
+                console.log("huPlayer is set to: " + huPlayer)
                 // if(gameBoard.playerCount===2){
                 gameBoard['playerArena'][1]["mark"]="O";
                 aiPlayer = "O";
+                console.log("aiPlayer is set to: " + aiPlayer)
                 // }
                 pickedX();
+
+
             }else if(input==="O"){
-                
+
                 console.log("selected " + gameBoard.playerMark)
                 gameBoard['playerArena'][0]["mark"]="O";
-                huplayer ="X"
+                huPlayer ="O"
                 // if(gameBoard.playerCount===2){
-                gameBoard['playerArena'][1]["mark"]="X";}
-                aiPlayer="O"
+                gameBoard['playerArena'][1]["mark"]="X";
+                aiPlayer="X"
                 pickedO();
-            // }
+            }
             markSelectorModalContent.style.display="none";
             generateGame();
 }
@@ -538,7 +547,9 @@ const generateGame =()=>{
 
 const tileSelection = (e)=>{
         let currentPlayer=gameBoard.currentPlayer;
-        let arraySelected = 10
+        let arraySelected = 0;
+
+
         if(gameBoard.currentPlayer===0){
             arraySelected = parseInt(e.target.dataset.dewey);
             console.log(arraySelected + " is array selected.....?")
@@ -551,10 +562,15 @@ const tileSelection = (e)=>{
                 gameBoard.gboard[arraySelected]= gameBoard.playerArena[currentPlayer].mark;
                 updatePlayerCardsWithTurn()
                 gameBoard.currentPlayer=1; 
-                
                 }
+            }
+        if(numberOfPlayers === 1){
+                    console.log("only 1 player, running Computer");
+                    checkAndRunAI();
                 
-        }else{
+
+                
+        }else if(numberOfPlayers===2){
             arraySelected = parseInt(e.target.dataset.dewey);
             console.log(arraySelected + " is array selected.....?")
             console.log(gameBoard.gboard[arraySelected])
@@ -571,7 +587,14 @@ const tileSelection = (e)=>{
             }
                 
         }
+const checkAndRunAI = ()=>{
+    console.log("check and run AI initiated");
+    var index = minimax(origBoard, aiPlayer).index;
+    var selector = "#" + index;
+      // $(selector).css("background-color", aiCo);
+    origBoard[index] = aiPlayer;
 
+}
 
 const updatePlayerCardsWithTurn = ()=>{    
     console.log("update called")
