@@ -344,7 +344,6 @@ const gameBoard = {
 
 let origBoard = gameBoard.gboard;
 
-//first we'll pll from ttorial
 const inspectForWin=(board, player)=>{
                         
                         // let uR=gameBoard.playerArena[gameBoard.currentPlayer].mark;
@@ -395,12 +394,6 @@ let iter = 0;
 function emptyIndexies(board){
   return  board.filter(s => s != "O" && s != "X");
 }
-
-
-//cut from here
-
-
-
 function minimax(newBoard, player) {
     // console.log("minimax initiated")
   iter++;
@@ -464,8 +457,6 @@ function minimax(newBoard, player) {
   return moves[bestMove];
 }
 
-
-
                                                                 // END SPECIFICALLY AI MOVES
 
 const playerSelectsMode = ()=>{
@@ -479,6 +470,7 @@ const playerNameEntry = (pCountInput)=>{
     }
     if(pCountInput===2){
         gameBoard.playerCount=2;
+        numberOfPlayers = 2;
     }
     modeSelectorModalContent.style.display="none";
     p1NameEnterModal.style.display="flex";
@@ -571,9 +563,10 @@ const tileSelection = (e)=>{
              
                 
         }else if(numberOfPlayers===2){
+            console.log("2playermode");
+            
             arraySelected = parseInt(e.target.dataset.dewey);
-            console.log(arraySelected + " is array selected.....?")
-            console.log(gameBoard.gboard[arraySelected])
+            updatePlayerCardsWithTurn();
 
                 if(typeof(gameBoard.gboard[arraySelected]) !== "number"){
                     return;
