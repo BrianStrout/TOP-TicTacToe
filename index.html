@@ -401,7 +401,7 @@ function emptyIndexies(board){
 
 
 function minimax(newBoard, player) {
-    console.log("minimax initiated")
+    // console.log("minimax initiated")
   iter++;
 
   let availSpots = emptyIndexies(origBoard);
@@ -424,7 +424,7 @@ function minimax(newBoard, player) {
   for (var i = 0; i < availSpots.length; i++) {
     let move = {};
     move.index = newBoard[availSpots[i]];
-    console.log("checking out move at " + move.index)
+    // console.log("checking out move at " + move.index)
     newBoard[availSpots[i]] = player;
 
     if (player == aiPlayer) {
@@ -541,10 +541,7 @@ const generateGame =()=>{
         battlediv.appendChild(box);
         box.addEventListener('click', tileSelection)
     }
-
-
 }
-
 const tileSelection = (e)=>{
         let currentPlayer=gameBoard.currentPlayer;
         let arraySelected = 0;
@@ -589,10 +586,41 @@ const tileSelection = (e)=>{
         }
 const checkAndRunAI = ()=>{
     console.log("check and run AI initiated");
-    var index = minimax(origBoard, aiPlayer).index;
-    var selector = "#" + index;
+    let index = minimax(origBoard, aiPlayer).index;
+    let selected = `box${index}`;
+    // let selectedBox = document.getElementById(selected);
+    // console.log(selectedBox);
+    console.log("ai has selected: " + selected)    
       // $(selector).css("background-color", aiCo);
+      document.getElementById(selected).innerHTML=aiPlayer;
     origBoard[index] = aiPlayer;
+    console.log("AIPlayer is typed as: " + typeof(aiPlayer))
+    // selectedBox.innerHTML= String(aiPlayer);
+    
+
+
+
+    // {
+    //         arraySelected = parseInt(e.target.dataset.dewey);
+
+    //             if(typeof(gameBoard.gboard[arraySelected]) !== "number"){
+    //                 return;
+    //             }else{
+    //             e.target.innerHTML= gameBoard.playerArena[currentPlayer].mark;
+    //             gameBoard.gboard[arraySelected]= gameBoard.playerArena[currentPlayer].mark;
+    //             updatePlayerCardsWithTurn()
+    //             gameBoard.currentPlayer=1; 
+    //             }
+    //         }
+
+
+
+
+
+
+
+
+
 
 }
 
