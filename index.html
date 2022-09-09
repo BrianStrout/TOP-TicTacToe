@@ -346,10 +346,8 @@ let origBoard = gameBoard.gboard;
 
 const inspectForWin=(board, player)=>{
                         
-                        // let uR=gameBoard.playerArena[gameBoard.currentPlayer].mark;
+
                         let win = false;
-                        // let urPlayer = gameBoard.currentPlayer;
-                        // console.log("inspecting" + uR);
                         if((board[0] === player && board[1]===player && board[2]===player)||
                         (board[3] === player && board[4]===player && board[5]===player)||
                         (board[6] === player && board[7]===player && board[8]===player)||
@@ -363,29 +361,8 @@ const inspectForWin=(board, player)=>{
             return win;
                                     // gameOver(urPlayer);
 }
-// const inspectForWin=()=>{
-                        
-//                         let uR=gameBoard.playerArena[gameBoard.currentPlayer].mark;
-//                         let win = false;
-//                         let urPlayer = gameBoard.currentPlayer;
-//                         console.log("inspecting" + uR);
-//                                 if((gameBoard.gboard[0] === uR && gameBoard.gboard[1]===uR && gameBoard.gboard[2]===uR)||
-//                                     (gameBoard.gboard[3] === uR && gameBoard.gboard[4]===uR && gameBoard.gboard[5]===uR)||
-//                                     (gameBoard.gboard[6] === uR && gameBoard.gboard[7]===uR && gameBoard.gboard[8]===uR)||
-//                                     (gameBoard.gboard[0] === uR && gameBoard.gboard[3]===uR && gameBoard.gboard[6]===uR)||
-//                                     (gameBoard.gboard[1] === uR && gameBoard.gboard[4]===uR && gameBoard.gboard[7]===uR)||
-//                                     (gameBoard.gboard[2] === uR && gameBoard.gboard[5]===uR && gameBoard.gboard[8]===uR)||
-//                                     (gameBoard.gboard[0] === uR && gameBoard.gboard[4]===uR && gameBoard.gboard[8]===uR)||
-//                                     (gameBoard.gboard[2] === uR && gameBoard.gboard[4]===uR && gameBoard.gboard[6]===uR)
-//                                 ){
-//                                     let win = true;
-//                                 }                             
-//                     return win;
-//                                     // gameOver(urPlayer);
-// }
-                                                                // START SPECIFICALLY AI MOVES
 
-// an array to collect all the objects
+
 
 let availSpots = emptyIndexies(gameBoard.gboard);
 let huplayer = "";
@@ -458,6 +435,18 @@ function minimax(newBoard, player) {
 }
 
                                                                 // END SPECIFICALLY AI MOVES
+
+
+
+
+
+
+
+
+
+
+
+
 
 const playerSelectsMode = ()=>{
     // modeSelectorModal.style.display="flex" 
@@ -538,16 +527,19 @@ const generateGame =()=>{
 const tileSelection = (e)=>{
     let currentPlayer=gameBoard.currentPlayer;
     let arraySelected = 0;
-        if(gameBoard.currentPlayer===0){
+        if(currentPlayer===0){
             arraySelected = parseInt(e.target.dataset.dewey);
             console.log(arraySelected + " is array selected.....?")
-            console.log(gameBoard.gboard[arraySelected])
+
 
             if(typeof(gameBoard.gboard[arraySelected]) !== "number"){
                     return;
                 }else{
                 e.target.innerHTML= gameBoard.playerArena[currentPlayer].mark;
                 gameBoard.gboard[arraySelected]= gameBoard.playerArena[currentPlayer].mark;
+                gameBoard.currentPlayer=1; 
+                currentPlayer=gameBoard.currentPlayer;
+                console.log("mark placed and current player is " + currentPlayer);
                 }
             }
 
@@ -556,9 +548,9 @@ const tileSelection = (e)=>{
                     console.log("only 1 player, running Computer");
                     
                     updatePlayerCardsWithTurn();
-                    gameBoard.currentPlayer=1; 
+                    
                     setTimeout(function(){checkAndRunAI();}, 2000);
-                    gameBoard.currentPlayer=0; 
+                    // gameBoard.currentPlayer=0; 
                     // 
              
                 
@@ -593,29 +585,7 @@ const checkAndRunAI = ()=>{
     console.log("AIPlayer is typed as: " + typeof(aiPlayer))
     // selectedBox.innerHTML= String(aiPlayer);
     updatePlayerCardsWithTurn();
-
-
-
-    // {
-    //         arraySelected = parseInt(e.target.dataset.dewey);
-
-    //             if(typeof(gameBoard.gboard[arraySelected]) !== "number"){
-    //                 return;
-    //             }else{
-    //             e.target.innerHTML= gameBoard.playerArena[currentPlayer].mark;
-    //             gameBoard.gboard[arraySelected]= gameBoard.playerArena[currentPlayer].mark;
-    //             updatePlayerCardsWithTurn()
-    //             gameBoard.currentPlayer=1; 
-    //             }
-    //         }
-
-
-
-
-
-
-
-
+      gameBoard.currentPlayer=0; 
 
 
 }
